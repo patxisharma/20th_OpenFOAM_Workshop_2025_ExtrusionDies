@@ -1,0 +1,26 @@
+dprepro --output-format '%.2f' $1 ../templatedir/input.template value.csv
+
+
+echo "creating workdirs"
+
+cp -r ../casebase .
+
+cd casebase
+echo "start running"
+
+while [ ! -f ./constant/triSurface/total.stl ]; do
+    sleep 1
+done
+
+openfoam2406 blockMesh >> log.blockMesh 2>&1
+openfoam2406 surfaceFeatureExtract >> log.surfaceFeatureExtract  2>&1
+openfoam2406 snappyHexMesh -overwrite >> log.snappyHexMesh 2>&1
+openfoam2406 transformPoints -scale 1e-3 >> log.transformPoints 2>&1
+openfoam2406 checkMesh >> log.checkMesh 2>&1
+openfoam2406 viscousSimpleFoam >> log.viscousSimpleFoam 2>&1
+
+cd ..
+echo "finished running"
+
+tail -n 1 casebase/postProcessing/Fobj.dat | awk '{print $(NF-1) }' | sed -e $'s/,/ /g' > results.txt
+cp results.txt $2

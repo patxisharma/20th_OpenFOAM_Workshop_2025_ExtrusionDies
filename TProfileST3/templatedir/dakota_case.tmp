@@ -1,0 +1,74 @@
+################################################################################
+environment
+  	tabular_data
+    	tabular_data_file = 'table_out.dat'
+	output_precision 3
+################################################################################
+  
+  
+  
+################################################################################  
+#method
+#   	id_method = 'method1'    
+#    	sampling
+#    	sample_type
+#    	lhs		
+    	#
+#    	samples = 8	# 310
+#       seed = 52
+    
+###############################################################################
+################################################################################
+
+method
+
+#mesh_adaptive_search
+        initial_delta = 2
+	asynch_pattern_search
+	variable_tolerance = 0.1
+   
+################################################################################
+
+
+variables,
+	  	continuous_design = 4
+	        initial_point    2 1.5 5 5   #add one entry per variables
+	        upper_bounds     4 3 10 10 #add one entry per variables
+	  	lower_bounds     2 1.5 5 5   #add one entry per variables
+	        descriptors      't1' 't2' 't3' 't4' #add one entry per variables
+
+
+################################################################################
+
+
+
+################################################################################
+interface,
+        	fork,
+        	asynchronous evaluation_concurrency = 5
+		analysis_driver = {x1}
+		parameters_file = 'params.in'
+		results_file    = 'results.out'
+		work_directory directory_tag
+
+        copy_files = {x2}
+
+
+# uncomment to leave params.in and results.out files in work_dir subdirectories
+ 	named {x3} file_save  directory_save
+
+# when using conmin_frcg (above) with analytic_gradients (below), 
+# need to turn off the active set vector as rosenbrock_bb does not parse it.
+ 	  deactivate active_set_vector
+################################################################################
+
+
+################################################################################	  
+responses
+  	objective_functions = 1
+
+ 	no_gradients
+	no_hessians
+			 
+	sense 'min'	
+################################################################################

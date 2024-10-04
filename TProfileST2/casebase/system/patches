@@ -1,0 +1,20 @@
+IS1
+{
+name IS1 ;
+}
+ES1
+{
+name ES1 ;
+}
+ES2
+{
+name ES2 ;
+}
+inlet
+{
+name inlet ;
+}
+walls
+{
+name walls ;
+}

@@ -1,0 +1,67 @@
+/*--------------------------------*- C++ -*----------------------------------*\
+| =========                 |                                                 |
+| \\      /  F ield         | OpenFOAM: The Open Source CFD Toolbox           |
+|  \\    /   O peration     | Version:  v2106                                 |
+|   \\  /    A nd           | Website:  www.openfoam.com                      |
+|    \\/     M anipulation  |                                                 |
+\*---------------------------------------------------------------------------*/
+FoamFile
+{
+    version     2.0;
+    format      ascii;
+    class       dictionary;
+    object      blockMeshDict;
+}
+// * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * //
+
+scale   1;
+
+#include boundingBox;
+meshResultion 4;
+xcells  #calc "mag(round(($xmax - $xmin)/$meshResultion))";
+ycells  #calc "mag(round(($ymax - $ymin)/$meshResultion))";
+zcells  #calc "mag(round(($zmax - $zmin)/$meshResultion))";
+vertices
+(
+    ($xmin  $ymin  $zmin)   //0
+    ($xmax  $ymin  $zmin)   //1
+    ($xmax  $ymax  $zmin)   //2
+    ($xmin  $ymax  $zmin)   //3
+    ($xmin  $ymin  $zmax)   //4
+    ($xmax  $ymin  $zmax)   //5
+    ($xmax  $ymax  $zmax)   //6
+    ($xmin  $ymax  $zmax)   //7
+);
+
+blocks
+(
+    hex (0 1 2 3 4 5 6 7) ($xcells $ycells $zcells) simpleGrading (1 1 1)
+);
+
+edges
+(
+);
+
+boundary
+(
+
+    
+    defaultFaces
+    {
+        type        patch;
+        faces
+        (
+            (0 4 7 3)   // x direction
+            (2 6 5 1)   // x direction
+            (3 7 6 2)   // y direction
+            (1 5 4 0)   // y direction
+            (0 3 2 1)   // z direction
+            (4 5 6 7)   // z direction
+        );
+    }
+
+);
+
+
+// ************************************************************************* //
+
